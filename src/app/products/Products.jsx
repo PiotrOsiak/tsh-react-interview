@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import './Products.scss';
+
 import { AppRoute } from '../../routing/AppRoute.enum';
+import { Header } from '../../components/Header/Header';
 
 import axios from 'axios';
 
@@ -19,9 +22,13 @@ export const Products = () => {
 
   return (
     <>
-      <h2>Products page</h2>
-      <p>Users: { products.length }</p>
-      <Link to={AppRoute.login}> Login </Link>
+      <Header/>
+
+      <div className="container">
+        <h2>Products page</h2>
+        <p>Users: { products.length }</p>
+        <Link to={AppRoute.login}> Login </Link>
+      </div>
     </>
   );
 };

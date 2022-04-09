@@ -1,0 +1,40 @@
+@mixin screenSize($screen) {
+    @if $screen == mobile {
+        @media screen and (max-width: $sizeMobile) {
+            @content;
+        }
+    }
+    @else if $screen == tablet {
+        @media screen and (max-width: $sizeTablet) {
+            @content;
+        }
+    }
+    @else if $screen == laptop {
+        @media screen and (max-width: $sizeLaptop) {
+            @content;
+        }
+    }
+    @else if $screen == desktop {
+        @media screen and (max-width: $sizeDesktop) {
+            @content;
+        }
+    }
+    @else if $screen == wideScreen {
+        @media screen and (max-width: $sizeWideScreen) {
+            @content;
+        }
+    }
+    @else if $screen == fullhd {
+        @media screen and (max-width: $sizeFullHD) {
+            @content;
+        }
+    }
+    @else if $screen == fullhdplus {
+        @media screen and (min-width: ($sizeFullHD + 1)) {
+            @content;
+        }
+    }
+    @else {
+        @error 'Available options are mobile; tablet; laptop; desktop; wideScreen; fullhd; fullhdplus';        
+    }
+}

@@ -1,0 +1,9 @@
+@use '~normalize-scss/sass/normalize';
+/** General Styles */
+@import './scss/reset';
+@import './scss/variables';
+@import './scss/typography';
+@import './scss/animations';
+@import './scss/functions';
+@import './scss/global';
+@import './scss/mixins';

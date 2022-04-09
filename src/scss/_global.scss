@@ -1,0 +1,32 @@
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 62.5%;
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+}
+
+body {
+    position: relative;
+    min-width: $minWidth;
+    font-size: 1.8rem;
+    line-height: 1.6;
+    font-family: sans-serif;
+    text-rendering: geometricPrecision;
+    font-weight: 400;
+    background: $gray-1;
+    color: $gray-dark;
+    overflow-x: hidden;
+    font-family: $fontFamily;
+    font-weight: $fw-semibold;
+
+    .container {
+        max-width: $maxWidth;
+        margin: 0 auto;
+    }
+}

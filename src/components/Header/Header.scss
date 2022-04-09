@@ -1,0 +1,12 @@
+@import '/src/App.scss';
+
+.header {
+    width: 100%;
+    padding: 35px;
+    background: $white;    
+
+    &__wrapper {
+        max-width: $maxWidth;
+        margin: 0 auto;
+    }
+}
