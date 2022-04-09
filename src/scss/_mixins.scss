@@ -9,6 +9,11 @@
             @content;
         }
     }
+    @else if $screen == tabletWide {
+        @media screen and (max-width: $sizeTabletWide) {
+            @content;
+        }
+    }
     @else if $screen == laptop {
         @media screen and (max-width: $sizeLaptop) {
             @content;
@@ -35,6 +40,6 @@
         }
     }
     @else {
-        @error 'Available options are mobile; tablet; laptop; desktop; wideScreen; fullhd; fullhdplus';        
+        @error 'Available options are mobile; tablet; tabletWide; laptop; desktop; wideScreen; fullhd; fullhdplus';        
     }
 }

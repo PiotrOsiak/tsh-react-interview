@@ -1,0 +1,27 @@
+@import '/src/App.scss';
+
+.container {
+    padding: 35px 0;
+    // @include screenSize(laptop) {
+    //     padding: 35px 15px;
+    // }
+    // @include screenSize(tabletWide) {
+    //     padding: 35px 0;
+    // }
+
+    .products {
+        display: flex;
+        align-items: center;
+        flex-flow: row wrap;
+        
+        &__card {
+            width: 25%;
+            padding: 15px;
+            min-height: 300px;
+        }
+        &__card-inner {
+            background: $white;
+            height: 100%;
+        }
+    }
+}

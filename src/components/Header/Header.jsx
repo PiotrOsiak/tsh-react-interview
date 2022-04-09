@@ -1,17 +1,16 @@
 import React, {useState} from 'react';
-import { MdSearch } from 'react-icons/md';
-// import Image from '../../../public/user.png';
+import { MdSearch, MdDone } from 'react-icons/md';
 
 import './Header.scss';
 
 
 const CheckboxComponent = (props) => {
   return (
-    <div className="search-checkbox-item">
+    <div className="checkbox-item">
       <label>
         <input id={props.id} type="checkbox" name={props.name} className='checkbox'/>
         <span className="name">{ props.text }</span>
-        <span className='custom'></span>
+        <span className='custom'><MdDone className='checked' /></span>
       </label>
     </div>
   );
@@ -20,17 +19,17 @@ const CheckboxComponent = (props) => {
 const SearchComponent = () => {
   return (    
     <div className='header__wrapper--search'>
-      <div className="header__wrapper--search-container">
-        <div className="search-input">
+      <div className="search__container">
+        <div className="search__container--input">
           <label>
-            <input type="search" />
+            <input type="text" />
             <span className="label">Search</span>
             <span className="icon">
               <MdSearch className='search' />
             </span>
           </label>
         </div>
-        <div className="search-checkboxes">
+        <div className="search__container--checkboxes">
           <CheckboxComponent id="label_active" name="active" text="Active" />
           <CheckboxComponent id="label_promo" name="promo" text="Promo" />
         </div>
@@ -39,9 +38,9 @@ const SearchComponent = () => {
   );
 };
 
-const User = (props) => {
+const User = () => {
   let [showMenu, setShowMenu] = useState(false);
-  let [auth, setAuth] = useState(props.authorized);
+  let [auth, setAuth] = useState(false);
 
   const handleUserClick = () => {
     setShowMenu(!showMenu);
@@ -54,23 +53,24 @@ const User = (props) => {
 
   const handleLogout = () => {
     setAuth(true);
+    setShowMenu(!showMenu);
   }
 
   return (
     <div className="header__wrapper--user">
       {
         auth ? (
-          <div className="header__wrapper--user-auth">
-            <div className='user-auth-avatar' onClick={handleUserClick}>
+          <div className="user">
+            <div className='user--avatar' onClick={handleUserClick}>
               <img src="./user.png" alt='avatar' title='avatar' role='img' />
             </div>
-            <div className={`user-auth-dropdown ${showMenu ? "show" : ""}`}>
-              <a href="/" className='button-dropdown' onClick={handleDropdown}>Logout</a>
+            <div className={`user--dropdown ${showMenu ? "show" : ""}`}>
+              <a href="/" className='button button-dropdown' onClick={handleDropdown}>Logout</a>
             </div>
           </div>  
         ) : (
-          <div className="header__wrapper--user-not-auth">
-            <button type='button' className='button button--primary' onClick={handleLogout}>Log in</button>
+          <div className="user-login">
+            <button type='button' className='button button-primary' onClick={handleLogout}>Log in</button>
           </div>  
         )
       }        
@@ -79,18 +79,16 @@ const User = (props) => {
 }
 
 export const Header = () => {
-  let [authorized, setAuthorized] = useState(true);
-
   return (
     <>
       <header className='header'>
         <div className="header__wrapper">
           <div className='header__wrapper--title'>
-            <p className='header__wrapper--title-text'>join.tsh.io</p>
+            <p>join.tsh.io</p>
           </div>
 
           <SearchComponent />
-          <User authorized={authorized} />   
+          <User />   
           
         </div>
       </header>
