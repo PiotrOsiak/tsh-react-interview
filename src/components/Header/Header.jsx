@@ -53,7 +53,7 @@ const User = () => {
 
   const handleLogout = () => {
     setAuth(true);
-    setShowMenu(!showMenu);
+    setShowMenu(false);
   }
 
   return (

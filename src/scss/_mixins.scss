@@ -4,6 +4,11 @@
             @content;
         }
     }
+    @else if $screen == mobileWide {
+        @media screen and (max-width: $sizeMobileWide) {
+            @content;
+        }
+    }
     @else if $screen == tablet {
         @media screen and (max-width: $sizeTablet) {
             @content;

@@ -8,10 +8,15 @@ $gray-3           : #B9BDCF;
 $gray-4           : #9194A5;
 $gray-dark        : #1A1B1D;
 
+:root {
+    --data-color-gray-dark: #1A1B1D;
+}
+
 $fontFamily: 'Nunito', sans-serif;
 $fw-semibold: 600;
 
 $sizeMobile: 480px;
+$sizeMobileWide: 640px;
 $sizeTablet: 768px;
 $sizeTabletWide: 992px;
 $sizeLaptop: 1200px;

@@ -1,27 +1,248 @@
 @import '/src/App.scss';
 
 .container {
-    padding: 35px 0;
-    // @include screenSize(laptop) {
-    //     padding: 35px 15px;
-    // }
-    // @include screenSize(tabletWide) {
-    //     padding: 35px 0;
-    // }
+    padding: 35px; 
+    @include screenSize(laptop) {
+        padding: 35px 15px;
+    }
+    @include screenSize(tabletWide) {
+        padding: 35px 0;
+    }   
 
     .products {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         flex-flow: row wrap;
+        @include screenSize(desktop) {
+            padding: 0 35px;
+        }
         
         &__card {
+            padding: 8px 16px 20px;
             width: 25%;
-            padding: 15px;
-            min-height: 300px;
+            min-height: 300px;    
+            @include screenSize(laptop) {
+                width: 33.33%;
+            }
+            @include screenSize(tablet) {
+                width: 50%;
+            }
+            @include screenSize(mobileWide) {
+                width: 100%;
+                padding: 0 0 15px;
+            }
         }
         &__card-inner {
             background: $white;
-            height: 100%;
+            margin: 0 0 0 -16px;
+            min-height: 100%;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;    
+            @include screenSize(mobileWide) {
+                margin: 0;
+            }
+        }
+        &__card--image {
+            height: 170px;          
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            overflow: hidden;  
+            figure {
+                box-sizing: border-box;
+                width: 100%;       
+                height: 100%;         
+                position: relative;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    
+                }
+                figcaption {
+                    position: absolute;
+                    top: 15px;
+                    left: 0;
+                    .products__card--image-label {
+                        background: $orange;
+                        padding: 0px 20px;
+                        .label-text {
+                            color: $white;
+                            font-size: 1.4rem;
+                            line-height: 1.4;                            
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+        &__card--details {
+            padding: 15px;
+            display: flex;
+            align-items: stretch;
+            flex-direction: column;
+            flex: 1 0 auto;
+            .products__card--details-name {
+                align-self: flex-start;
+                h2 {
+                    font-size: 1.8rem;
+                    line-height: 1.6;
+                }
+            }
+
+            .products__card--details-description {
+                padding: 5px 10px 25px 0;
+                align-self: flex-start;
+                p {
+                    font-size: 1.4rem;
+                    color: $gray-4;
+                    line-height: 1.4;
+                }
+            }
+
+            .products__card--details-rating {
+                margin-bottom: 3px;
+                margin-top: auto;                
+                span {
+                    svg {
+                        margin-right: 10px;
+                        width: 14px;
+                        &.colored {
+                            fill: $orange;
+                            stroke-width: 1px;
+                            stroke: $orange;
+                            path:nth-child(1) {
+                                stroke: none;
+                            }
+                        }
+                        &.plain {
+                            fill: transparent;
+                            stroke: $gray-4;
+                            stroke-width: 1px;
+                            path:nth-child(1) {
+                                stroke: none;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .products__card--details-button {
+                width: 100%;
+                .button-primary {
+                    background: $blue-primary;
+                    color: $white;
+                    transition: .2s all ease-out;
+                    display: block;
+                    padding: 10px 16px;
+                    text-align: center;
+                    text-decoration: none;
+                    font-size: 1.4rem;
+                    border-radius: 4px;
+                    &:hover {
+                        background: $blue-secondary;
+                    }
+                }
+                .button-disabled {
+                    background: $gray-4;
+                    pointer-events: none;
+                    touch-action: none;
+                }
+            }
         }
     }
+}
+
+.product__modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    display: none;
+    
+    &--show {        
+        display: block;    
+    }
+
+    &-overlay {
+        background: transparentize($gray-dark, .1);
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;        
+        justify-content: center;        
+    }
+
+    &--close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 36px;
+        height: 36px;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $gray-1;
+        border-radius: 18px;
+        svg {
+            width: 21px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            fill: $gray-dark;
+        }
+    }
+
+    &--box {
+        background: $white;
+        border-radius: 8px;      
+        position: relative;  
+        width: 530px;
+        max-height: 80vh;
+        @include screenSize(tablet) {
+            width: 90vw;
+        }
+        &-image {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+        &-details {
+            padding: 10px 25px 25px;
+            &-title {
+                h2 {
+                    font-size: 2.4rem;
+                    color: $gray-dark;
+                    line-height: 1.4;
+                }
+            }
+            &-description {
+                padding: 5px 25px 25px 0;
+                p {
+                    font-size: 1.8rem;
+                    line-height: 1.4;
+                    color: $gray-4;
+                }
+            }
+        }
+    }
+
 }
