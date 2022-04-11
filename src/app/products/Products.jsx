@@ -6,11 +6,13 @@ import './Products.scss';
 
 // import { AppRoute } from '../../routing/AppRoute.enum';
 import { Header } from '../../components/Header/Header';
+import { ProductsNotFound } from '../../components/NotFound/ProductsNotFound';
+import { ProductsPagination } from '../../components/Pagination/ProductsPagination';
 
 import axios from 'axios';
 
 const ProductItemModal = (props) => { 
-  console.log(props);
+  // console.log(props);
 
   return (
     <div id={`product_${props.id}`} className={`product__modal ${props.show ? 'product__modal--show' : ''}`} data-product={props.id}>
@@ -90,10 +92,15 @@ const ProductItem = (props) => {
   );
 };
 
+const Spinner = () => {
+  return <div className='spinner'><div className="spinner-inner"></div></div>;
+};
+
 const ProductContainer = () => {
-  let [products, setProducts] = useState([]);
-  let [dataModal, setDataModal] = useState(null);
-  let [openModal, setOpenModal] = useState(false);
+  const [products, setProducts] = useState({items: [], meta: []});
+  const [dataModal, setDataModal] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleProductDetails = (e, data) => {   
     e.preventDefault();
@@ -109,41 +116,64 @@ const ProductContainer = () => {
     return openModal;
   };
 
-  useEffect(() => {
-    axios.get('https://join-tsh-api-staging.herokuapp.com/products?limit=8&page=1').then(response => {
-      // console.log(response.data.items);
-      setProducts(response.data.items);
-    }).catch(error => {
-      // console.log(error.response)
-    })
-  }, []);
+  useEffect(() => { 
+    let mounted = true;
 
-  return (
-    <>
-    <div className='products'>
-      {
-        products.map(product => {
-          return (
-            <ProductItem 
-              key={product.id}
-              id={product.id}
-              name={product.name}
-              description={product.description}
-              rating={product.rating}
-              image={product.image}
-              promo={product.promo}
-              active={product.active}
-              onClick={evt => handleProductDetails(evt, product)}
-            />
-          )
-        })
+    axios.get('https://join-tsh-api-staging.herokuapp.com/products?limit=6&page=1').then(response => {
+      // console.log(response.data)
+      if(mounted) {
+        setLoading(false);
+        setProducts(s => ({...s, items: response.data.items, meta: response.data.meta}));
       }
-    </div>    
-    {
-      dataModal !== null ? (<ProductItemModal id={dataModal[0].id} image={dataModal[0].image} name={dataModal[0].name} description={dataModal[0].description} show={openModal} handleClose={handleCloseModal} />) : null
+    }).catch(error => {});
+
+    return function cleanup() {
+      mounted = false;
     }
-    </>
-  );
+  }, []);  
+
+  return loading ? <Spinner /> :
+  (       
+    products.items.length > 0 ? 
+      (
+        <>
+          <div className='products'>
+            {
+              products.items.map(product => {
+                return (
+                  <ProductItem 
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    description={product.description}
+                    rating={product.rating}
+                    image={product.image}
+                    promo={product.promo}
+                    active={product.active}
+                    onClick={evt => 
+                      handleProductDetails(evt, product)
+                    }
+                  />
+                )
+              })
+            }
+          </div>    
+          {
+            dataModal && (
+              <ProductItemModal 
+                id={dataModal[0].id} 
+                image={dataModal[0].image} 
+                name={dataModal[0].name} 
+                description={dataModal[0].description} 
+                show={openModal} 
+                handleClose={handleCloseModal} 
+              />
+            )
+          }
+          <ProductsPagination pages={products.meta.totalPages} />
+        </>
+      ) : <ProductsNotFound />
+  )
 };
 
 export const Products = () => {

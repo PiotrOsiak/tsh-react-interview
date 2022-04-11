@@ -14,6 +14,7 @@ html {
 body {
     position: relative;
     min-width: $minWidth;
+    min-height: 100vh;
     font-size: 1.8rem;
     line-height: 1.6;
     font-family: sans-serif;
@@ -25,6 +26,9 @@ body {
     font-family: $fontFamily;
     font-weight: $fw-semibold;
 
+    #root {
+        min-height: 100vh;
+    }
     .container {
         max-width: $maxWidth;
         margin: 0 auto;
