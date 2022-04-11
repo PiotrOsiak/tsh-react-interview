@@ -96,7 +96,7 @@ const Spinner = () => {
   return <div className='spinner'><div className="spinner-inner"></div></div>;
 };
 
-const ProductContainer = () => {
+const ProductContainer = (props) => {
   const [products, setProducts] = useState({items: [], meta: []});
   const [dataModal, setDataModal] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -123,7 +123,10 @@ const ProductContainer = () => {
       // console.log(response.data)
       if(mounted) {
         setLoading(false);
-        setProducts(s => ({...s, items: response.data.items, meta: response.data.meta}));
+
+        
+
+        // setProducts(s => ({...s, items: response.data.items, meta: response.data.meta}));
       }
     }).catch(error => {});
 
@@ -177,12 +180,18 @@ const ProductContainer = () => {
 };
 
 export const Products = () => {
+  const [isActive, setIsActive] = useState(true);
+  const [isPromo, setIsPromo] = useState(true);
+
+  const checkboxActive = () => setIsActive(isActive => !isActive);
+  const checkboxPromo = () => setIsPromo(isPromo => !isPromo);
+
   return (
     <>
-      <Header />
+      <Header active={checkboxActive} promo={checkboxPromo} />
 
       <div className="container">
-        <ProductContainer />
+        <ProductContainer showActive={isActive} showPromo={isPromo} />
 
         {/* <h2>Products page</h2> */}
         {/* <p>Products: { products.length }</p> */}

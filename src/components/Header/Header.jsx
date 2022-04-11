@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { MdSearch, MdDone } from 'react-icons/md';
 
 import './Header.scss';
@@ -8,7 +8,7 @@ const CheckboxComponent = (props) => {
   return (
     <div className="checkbox-item">
       <label>
-        <input id={props.id} type="checkbox" name={props.name} className='checkbox'/>
+        <input id={props.id} type="checkbox" name={props.name} className='checkbox' onChange={props.onChange} />
         <span className="name">{ props.text }</span>
         <span className='custom'><MdDone className='checked' /></span>
       </label>
@@ -16,7 +16,7 @@ const CheckboxComponent = (props) => {
   );
 };
 
-const SearchComponent = () => {
+const SearchComponent = (props) => {
   return (    
     <div className='header__wrapper--search'>
       <div className="search__container">
@@ -30,8 +30,8 @@ const SearchComponent = () => {
           </label>
         </div>
         <div className="search__container--checkboxes">
-          <CheckboxComponent id="label_active" name="active" text="Active" />
-          <CheckboxComponent id="label_promo" name="promo" text="Promo" />
+          <CheckboxComponent id="label_active" name="active" text="Active" onChange={props.activeCheckbox} />
+          <CheckboxComponent id="label_promo" name="promo" text="Promo" onChange={props.promoCheckbox} />
         </div>
       </div>
     </div>    
@@ -78,7 +78,7 @@ const User = () => {
   )
 }
 
-export const Header = () => {
+export const Header = (props) => {
   return (
     <>
       <header className='header'>
@@ -87,7 +87,7 @@ export const Header = () => {
             <p>join.tsh.io</p>
           </div>
 
-          <SearchComponent />
+          <SearchComponent activeCheckbox={props.active} promoCheckbox={props.promo} />
           <User />   
           
         </div>
