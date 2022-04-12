@@ -123,8 +123,11 @@
                 padding: 0 25px 0 0;
             }
             .checkbox-item {
-                margin-right: 16px;                
-                position: relative;       
+                margin-right: 16px;
+                position: relative;
+                &:first-of-type {
+                    margin-right: 32px;
+                }       
                 @include screenSize(tabletWide) {
                     margin-right: 20px;
                 }     
@@ -191,12 +194,13 @@
                 background: $white;
                 border: 1px solid $blue-primary;
                 color: $blue-primary;
-                display: block;
+                display: inline-block;
                 text-align: center;
-                padding: 11px 24px;
+                padding: 8px 24px;
                 border-radius: 4px;
-                cursor: pointer;
                 transition: .2s all ease-out;
+                text-decoration: none;
+                font-size: 1.4rem;
                 &:hover {
                     border-color: $blue-secondary;
                     color: $blue-secondary;

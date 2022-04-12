@@ -67,9 +67,7 @@ const ProductItem = (props) => {
             <div className="products__card--details-rating">
               <span>
                   {
-                    Array(5)
-                      .fill()
-                      .map((_, index) => (
+                    Array(5).fill().map((_, index) => (
                         <MdGrade 
                           key={index} 
                           className={`${index < props.rating ? 'colored' : 'plain'}`}
@@ -153,12 +151,41 @@ const ProductContainer = (props) => {
 };
 
 export const Products = () => {
-  const [products, setProducts] = useState({items: [], meta: []});
+  // const [products, setProducts] = useState({items: [], meta: []});
+  const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);  
 
+  const [searchValue, setSearchValue] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isPromo, setIsPromo] = useState(false);
-  
+    
+  const handleSearch = (target) => {
+    setSearchValue(target);
+    
+    if(!loading && products.length) {
+      // console.log(products.items);
+
+      // if(target) {
+      //   setProducts(
+      //     products.filter(product => {
+      //       if(product.name === target) {
+      //         return true
+      //       }
+      //       return false
+      //     }),
+      //   )
+      // }
+      // products.items.filter((data) => {
+      //   if(data.name.toLowerCase().indexOf(target.toLowerCase()) != -1) {
+      //     // filtered.push(data);
+      //   }
+      // });
+      
+      // setProducts(s => ({...s, items: filtered, meta: response.data.meta}));
+    }
+  }
   const checkboxActive = () => setIsActive(isActive => !isActive);
   const checkboxPromo = () => setIsPromo(isPromo => !isPromo);
 
@@ -167,42 +194,82 @@ export const Products = () => {
 
     setLoading(true);
 
-    axios.get('https://join-tsh-api-staging.herokuapp.com/products?limit=6&page=1').then(response => {
-      if(mounted) {
-        setLoading(false);
-
-        let items = [];
-
-        if(isActive) {                   
-          response.data.items.filter(item => item.active === isActive).map(item => {
-            items.push(item);
-          });               
-          
-          if(items.length) {
-            setProducts(s => ({...s, items: items, meta: response.data.meta}))
-          }
-        } else if (isPromo) {
-          response.data.items.filter(item => item.promo === isPromo).map(item => {
-            items.push(item);
-          });               
-          
-          if(items.length) {
-            setProducts(s => ({...s, items: items, meta: response.data.meta}))
-          }
-        } else if (isActive && isPromo) {
-          response.data.items.filter(item => item.active === isActive && item.promo === isPromo).map(item => {
-            items.push(item);
-          });               
-          
-          if(items.length) {
-            setProducts(s => ({...s, items: items, meta: response.data.meta}))
-          }
-        } else {
-          console.log('not active')        
-          setProducts(s => ({...s, items: response.data.items, meta: response.data.meta}))  
-        }
+    
+    if(mounted) {
+      let searchRequest = '';      
+      
+      if(isActive) {
+        searchRequest = 'limit=8&page='+currentPage+'&active='+isActive;
+      } else if (isPromo) {
+        searchRequest = 'limit=8&page='+currentPage+'&promo='+isPromo;
+      } else if (isActive && isPromo) {
+        searchRequest = 'limit=8&page='+currentPage+'&active='+isActive+'&promo='+isPromo;
+      } else {
+        searchRequest = 'limit=8&page='+currentPage;
       }
-    }).catch(error => {});
+            
+      // axios.get('https://join-tsh-api-staging.herokuapp.com/products?limit=8&page='+currentPage+'&active='+isActive+'&promo='+isPromo).then(response => {
+      axios.get('https://join-tsh-api-staging.herokuapp.com/products?'+searchRequest).then(response => {
+        if(mounted) {
+          setLoading(false);
+
+          setProducts(response.data.items);
+          setCurrentPage(response.data.meta.currentPage);
+          setTotalPages(response.data.meta.totalPages);
+        }
+      }).catch(error => {})
+    }
+
+    // axios.get('https://join-tsh-api-staging.herokuapp.com/products?limit=8&page=1&active='+isActive).then(response => {
+    //   if(mounted) {
+    //     setLoading(false);        
+
+    //     let items = [];
+    //     let metas = [];
+
+    //     if(isActive) {     
+    //       response.data.items.filter(item => item.active === isActive).map(item => {
+    //         items.push(item);
+    //       });
+        
+    //       if(items.length) {
+    //         setProducts(items);
+
+    //         console.log(response.data)
+            
+    //         // response.data.meta.filter(m => m.itemCount === items.length).map(mt => {
+    //         //   metas.push(mt);
+    //         // })
+            
+
+
+    //         // setProducts(s => ({...s, items: items, meta: response.data.meta}))            
+    //       }
+    //     } else if (isPromo) {
+    //       response.data.items.filter(item => item.promo === isPromo).map(item => {
+    //         items.push(item);
+    //       });               
+          
+    //       if(items.length) {
+    //         setProducts(items);
+    //         // setProducts(s => ({...s, items: items, meta: response.data.meta}))
+    //       }
+    //     } else if (isActive && isPromo) {
+    //       response.data.items.filter(item => item.active === isActive && item.promo === isPromo).map(item => {
+    //         items.push(item);
+    //       });               
+          
+    //       if(items.length) {
+    //         setProducts(items);
+    //         // setProducts(s => ({...s, items: items, meta: response.data.meta}))
+    //       }
+    //     } else {
+    //       setProducts(response.data.items);
+    //       console.log(response.data.meta);
+    //       // setProducts(s => ({...s, items: response.data.items, meta: response.data.meta}))  
+    //     }
+    //   }
+    // }).catch(error => {});
 
     return function cleanup() {
       mounted = false;
@@ -212,17 +279,17 @@ export const Products = () => {
 
   return (
     <>
-      <Header active={checkboxActive} promo={checkboxPromo} />
+      {/* <Header onInputChange={searchValue} search={isSearch} active={checkboxActive} promo={checkboxPromo} /> */}
+      <Header onChangeSearch={handleSearch} search={searchValue} active={checkboxActive} promo={checkboxPromo} />
 
       <div className="container">
         <ProductContainer           
           loading={loading}
-          items={products.items}
-          totalPages={products.meta.totalPages}
+          items={products}
+          totalPages={totalPages}
         />
 
-        {/* <h2>Products page</h2> */}
-        {/* <Link to={AppRoute.login}> Login </Link> */}
+        {/* <h2>Products page</h2> */}        
       </div>
     </>
   );
