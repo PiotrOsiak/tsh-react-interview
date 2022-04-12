@@ -15,6 +15,7 @@
     "e2e:wait-and-run:firefox": "./node_modules/.bin/wait-on http://localhost:1337/ && npm run e2e:run:firefox",
     "e2e:wait-and-run:chrome": "./node_modules/.bin/wait-on http://localhost:1337/ && npm run e2e:run:chrome"
   },
+  "homepage": "https://react-interview-tsh.herokuapp.com/",
   "browserslist": {
     "production": [
       ">0.2%",
