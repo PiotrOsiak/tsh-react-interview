@@ -13,26 +13,28 @@ import axios from 'axios';
 
 const ProductItemModal = (props) => { 
   return (
-    <div id={`product_${props.id}`} className={`product__modal ${props.show ? 'product__modal--show' : ''}`} data-product={props.id}>
-      <div className="product__modal-overlay">
-        <div className="product__modal--box">
-          <div className="product__modal--close" onClick={props.handleClose}>
-            <MdClose color='var(--data-color-gray-dark)' />
-          </div>
-          <div className="product__modal--box-image">
-            <img src={props.image} alt={props.name} title={props.name} role="img" />
-          </div>
-          <div className="product__modal--box-details">
-            <div className="product__modal--box-details-title">
-              <h2>{ props.name }</h2>
+<div id={`product_${props.id}`} className={`product__modal ${props.show ? 'product__modal--show' : ''}`} data-product={props.id}>
+    <div className="product__modal-overlay">
+        <div className="product__modal--box">            
+            <div className="product__modal--close" onClick={props.handleClose}>
+                <MdClose color='var(--data-color-gray-dark)' />
             </div>
-            <div className="product__modal--box-details-description">
-              <p>{ props.description }</p>
+            <div className="box-wrapper">
+                <div className="product__modal--box-image">
+                    <img src={props.image} alt={props.name} title={props.name} role="img" />
+                </div>
+                <div className="product__modal--box-details">
+                    <div className="product__modal--box-details-title">
+                        <h2>{ props.name }</h2>
+                    </div>
+                    <div className="product__modal--box-details-description">
+                        <p>{ props.description }</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
+</div>
   );
 };
 
@@ -278,19 +280,18 @@ export const Products = () => {
 
 
   return (
-    <>
-      {/* <Header onInputChange={searchValue} search={isSearch} active={checkboxActive} promo={checkboxPromo} /> */}
-      <Header onChangeSearch={handleSearch} search={searchValue} active={checkboxActive} promo={checkboxPromo} />
+    <>        
+        {/* <Header onInputChange={searchValue} search={isSearch} active={checkboxActive} promo={checkboxPromo} /> */}
+        <Header onChangeSearch={handleSearch} search={searchValue} active={checkboxActive} promo={checkboxPromo} />
 
-      <div className="container">
-        <ProductContainer           
-          loading={loading}
-          items={products}
-          totalPages={totalPages}
-        />
-
+        <div className="container">
+            <ProductContainer           
+                loading={loading}
+                items={products}
+                totalPages={totalPages}
+            />
         {/* <h2>Products page</h2> */}        
-      </div>
+        </div>
     </>
   );
 };
