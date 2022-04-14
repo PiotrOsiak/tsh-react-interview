@@ -1,1 +1,54 @@
 @import '/src/App.scss';
+
+%link-clear-style {
+    margin: 0;
+    padding: 0;
+    display: block;
+    text-decoration: none;
+    color: $gray-dark;
+}
+
+.pagination {
+    &__wrapper {
+        width: 100%;
+        max-width: $sizeTablet;
+        margin: 0 auto;
+        padding: 25px 10px;
+        ul {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .page-item {
+                margin: 0 8px;
+                &:first-of-type {
+                    margin-left: 0;
+                }
+                &:last-of-type {
+                    margin-right: 0
+                }
+                .page-link {
+                    @extend %link-clear-style;
+                    font-size: 1.4rem;
+                    &--active {
+                        color: $blue-primary;
+                    }                    
+                }
+
+                .button-link {
+                    @extend %link-clear-style;
+                    font-size: 1.4rem;
+                    &--active {
+                        color: $gray-4;
+                    }
+                }
+
+                &--first {
+                    padding-right: 30px;
+                }
+                &--last {
+                    padding-left: 30px;
+                }
+            }
+        }
+    }
+}

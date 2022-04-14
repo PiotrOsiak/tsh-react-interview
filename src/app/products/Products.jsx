@@ -13,28 +13,28 @@ import axios from 'axios';
 
 const ProductItemModal = (props) => { 
   return (
-<div id={`product_${props.id}`} className={`product__modal ${props.show ? 'product__modal--show' : ''}`} data-product={props.id}>
-    <div className="product__modal-overlay">
-        <div className="product__modal--box">            
-            <div className="product__modal--close" onClick={props.handleClose}>
-                <MdClose color='var(--data-color-gray-dark)' />
-            </div>
-            <div className="box-wrapper">
-                <div className="product__modal--box-image">
-                    <img src={props.image} alt={props.name} title={props.name} role="img" />
-                </div>
-                <div className="product__modal--box-details">
-                    <div className="product__modal--box-details-title">
-                        <h2>{ props.name }</h2>
-                    </div>
-                    <div className="product__modal--box-details-description">
-                        <p>{ props.description }</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id={`product_${props.id}`} className={`product__modal ${props.show ? 'product__modal--show' : ''}`} data-product={props.id}>
+      <div className="product__modal-overlay">
+          <div className="product__modal--box">            
+              <div className="product__modal--close" onClick={props.handleClose}>
+                  <MdClose color='var(--data-color-gray-dark)' />
+              </div>
+              <div className="box-wrapper">
+                  <div className="product__modal--box-image">
+                      <img src={props.image} alt={props.name} title={props.name} role="img" />
+                  </div>
+                  <div className="product__modal--box-details">
+                      <div className="product__modal--box-details-title">
+                          <h2>{ props.name }</h2>
+                      </div>
+                      <div className="product__modal--box-details-description">
+                          <p>{ props.description }</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
     </div>
-</div>
   );
 };
 
@@ -98,21 +98,22 @@ const ProductContainer = (props) => {
   const [dataModal, setDataModal] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
-  const handleProductDetails = (e, data) => {   
+  const showDetailsModal = (e, data) => {   
     e.preventDefault();
 
     setDataModal([data]);
     setOpenModal(true);
   };
 
-  const handleCloseModal = () => {
+  const closeDetailsModal = () => {
     setDataModal(null);
     setOpenModal(false);
 
     return openModal;
   }; 
 
-  return props.loading ? <Spinner /> : props.items.length > 0 ? (
+  // return props.loading ? <Spinner /> : props.items.length > 0 ? (
+  return (
     <>
       <div className="products">
         {
@@ -128,40 +129,47 @@ const ProductContainer = (props) => {
                 promo={item.promo}
                 active={item.active}
                 onClick={evt => 
-                  handleProductDetails(evt, item)
+                  showDetailsModal(evt, item)
                 }
               />
             )
           })
         }
       </div>
-      {
-        dataModal && (
-          <ProductItemModal 
-            id={dataModal[0].id} 
-            image={dataModal[0].image} 
-            name={dataModal[0].name} 
-            description={dataModal[0].description} 
-            show={dataModal} 
-            handleClose={handleCloseModal} 
-          />
-        )
+
+      {dataModal && 
+        <ProductItemModal 
+          id={dataModal[0].id} 
+          image={dataModal[0].image} 
+          name={dataModal[0].name} 
+          description={dataModal[0].description} 
+          show={dataModal} 
+          handleClose={closeDetailsModal} 
+        />
       }
-      <ProductsPagination pages={props.totalPages} />
+
+      {props.children}
+
+
+      {/* <ProductsPagination pages={props.totalPages} /> */}
+
+
     </>
-  ) : <ProductsNotFound />
+  );
+  // ) : <ProductsNotFound />
 };
 
-export const Products = () => {
-  // const [products, setProducts] = useState({items: [], meta: []});
+export const Products = () => {  
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);  
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading] = useState(true);  
+  const [productsPerPage, setProductsPerPage] = useState(8);
+  const [pagination, setPagination] = useState([]);
 
   const [searchValue, setSearchValue] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isPromo, setIsPromo] = useState(false);
+
     
   const handleSearch = (target) => {
     setSearchValue(target);
@@ -188,109 +196,95 @@ export const Products = () => {
       // setProducts(s => ({...s, items: filtered, meta: response.data.meta}));
     }
   }
+
   const checkboxActive = () => setIsActive(isActive => !isActive);
   const checkboxPromo = () => setIsPromo(isPromo => !isPromo);
 
+
+
   useEffect(() => { 
     let mounted = true;
+    let searchRequest = '';      
 
-    setLoading(true);
-
-    
-    if(mounted) {
-      let searchRequest = '';      
-      
-      if(isActive) {
-        searchRequest = 'limit=8&page='+currentPage+'&active='+isActive;
-      } else if (isPromo) {
-        searchRequest = 'limit=8&page='+currentPage+'&promo='+isPromo;
-      } else if (isActive && isPromo) {
-        searchRequest = 'limit=8&page='+currentPage+'&active='+isActive+'&promo='+isPromo;
-      } else {
-        searchRequest = 'limit=8&page='+currentPage;
-      }
-            
-      // axios.get('https://join-tsh-api-staging.herokuapp.com/products?limit=8&page='+currentPage+'&active='+isActive+'&promo='+isPromo).then(response => {
-      axios.get('https://join-tsh-api-staging.herokuapp.com/products?'+searchRequest).then(response => {
-        if(mounted) {
-          setLoading(false);
-
-          setProducts(response.data.items);
-          setCurrentPage(response.data.meta.currentPage);
-          setTotalPages(response.data.meta.totalPages);
-        }
-      }).catch(error => {})
+    if(isActive) {
+      searchRequest = 'limit=8&page='+currentPage+'&active='+isActive;
+    } else if (isPromo) {
+      searchRequest = 'limit=8&page='+currentPage+'&promo='+isPromo;
+    } else if (isActive && isPromo) {
+      searchRequest = 'limit=8&page='+currentPage+'&active='+isActive+'&promo='+isPromo;
+    } else {
+      searchRequest = 'limit=8&page='+currentPage;
     }
 
-    // axios.get('https://join-tsh-api-staging.herokuapp.com/products?limit=8&page=1&active='+isActive).then(response => {
+    const fetchProducts = async () => {
+      // setLoading(true);
+      console.log(currentPage);
+      const res = await axios('https://join-tsh-api-staging.herokuapp.com/products');
+
+      console.log(res.data.items);
+
+      setProducts(res.data.items);
+      setPagination(res.data.meta);
+      setLoading(false);
+    }
+
+    fetchProducts();
+          
+    // axios.get('https://join-tsh-api-staging.herokuapp.com/products?'+searchRequest).then(response => {
     //   if(mounted) {
-    //     setLoading(false);        
+    //     setLoading(false);
 
-    //     let items = [];
-    //     let metas = [];
-
-    //     if(isActive) {     
-    //       response.data.items.filter(item => item.active === isActive).map(item => {
-    //         items.push(item);
-    //       });
-        
-    //       if(items.length) {
-    //         setProducts(items);
-
-    //         console.log(response.data)
-            
-    //         // response.data.meta.filter(m => m.itemCount === items.length).map(mt => {
-    //         //   metas.push(mt);
-    //         // })
-            
-
-
-    //         // setProducts(s => ({...s, items: items, meta: response.data.meta}))            
-    //       }
-    //     } else if (isPromo) {
-    //       response.data.items.filter(item => item.promo === isPromo).map(item => {
-    //         items.push(item);
-    //       });               
-          
-    //       if(items.length) {
-    //         setProducts(items);
-    //         // setProducts(s => ({...s, items: items, meta: response.data.meta}))
-    //       }
-    //     } else if (isActive && isPromo) {
-    //       response.data.items.filter(item => item.active === isActive && item.promo === isPromo).map(item => {
-    //         items.push(item);
-    //       });               
-          
-    //       if(items.length) {
-    //         setProducts(items);
-    //         // setProducts(s => ({...s, items: items, meta: response.data.meta}))
-    //       }
-    //     } else {
-    //       setProducts(response.data.items);
-    //       console.log(response.data.meta);
-    //       // setProducts(s => ({...s, items: response.data.items, meta: response.data.meta}))  
-    //     }
+    //     setProducts(response.data.items);
+    //     setPagination(response.data.meta);
+    //     setCurrentPage(response.data.meta.currentPage);
     //   }
-    // }).catch(error => {});
+    // }).catch(error => {})
+      
 
     return function cleanup() {
       mounted = false;
     }
-  }, [isActive, isPromo]);  
+  }, [isActive, isPromo, pagination.totalPages]);  
 
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const paginate = (e, pageNumber) => {
+    e.preventDefault();
+    console.log(pageNumber);
+
+    setCurrentPage(pageNumber)
+  }  
+  
   return (
     <>        
-        {/* <Header onInputChange={searchValue} search={isSearch} active={checkboxActive} promo={checkboxPromo} /> */}
+        {/* <h2>Products page</h2> */}        
         <Header onChangeSearch={handleSearch} search={searchValue} active={checkboxActive} promo={checkboxPromo} />
 
         <div className="container">
-            <ProductContainer           
-                loading={loading}
-                items={products}
-                totalPages={totalPages}
-            />
-        {/* <h2>Products page</h2> */}        
+          { 
+            loading && <Spinner /> 
+          }        
+
+          { 
+            (!loading && products.length > 0) &&
+              <>
+                <ProductContainer items={currentProducts}> {/** products */}
+                  <ProductsPagination 
+                    productsPerPage={productsPerPage} 
+                    totalProducts={products.length} 
+                    paginate={paginate} 
+                    paginateCurrent={currentPage} 
+                  />
+                </ProductContainer> 
+              </>
+          }
+
+          {
+            (!loading && products.length === 0) && <ProductsNotFound />
+          }   
         </div>
     </>
   );

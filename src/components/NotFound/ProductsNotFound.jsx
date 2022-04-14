@@ -4,7 +4,7 @@ import './ProductsNotFound.scss';
 
 import { ReactComponent as Basket } from './basket.svg';
 
-export const ProductsNotFound = () => {
+export const ProductsNotFound = () => {    
     return (
         <>
             <div className="container__empty">
