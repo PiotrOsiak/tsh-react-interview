@@ -24,7 +24,7 @@ const SearchComponent = (props) => {
       <div className="search__container">
         <div className="search__container--input">
           <label>
-            <input type="text" value={props.search} onChange={evt => props.onChangeSearch(evt.target.value)} />
+            <input type="text" value={props.search} onChange={(evt) => { props.onChange(evt.target, evt.target.value) }} />
             <span className="label">Search</span>
             <span className="icon">
               <MdSearch className='search' />
@@ -90,7 +90,7 @@ export const Header = (props) => {
             <p>join.tsh.io</p>
           </div>
 
-          <SearchComponent onChangeSearch={props.onChangeSearch} search={props.search} activeCheckbox={props.active} promoCheckbox={props.promo} />
+          <SearchComponent onChange={props.onChange} search={props.search} activeCheckbox={props.active} promoCheckbox={props.promo} />
           <User />   
           
         </div>

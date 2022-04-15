@@ -168,88 +168,60 @@ export const Products = () => {
 
   const [searchValue, setSearchValue] = useState('');
   const [isActive, setIsActive] = useState(false);
-  const [isPromo, setIsPromo] = useState(false);
-
-    
-  const handleSearch = (target) => {
-    setSearchValue(target);
-    
-    if(!loading && products.length) {
-      // console.log(products.items);
-
-      // if(target) {
-      //   setProducts(
-      //     products.filter(product => {
-      //       if(product.name === target) {
-      //         return true
-      //       }
-      //       return false
-      //     }),
-      //   )
-      // }
-      // products.items.filter((data) => {
-      //   if(data.name.toLowerCase().indexOf(target.toLowerCase()) != -1) {
-      //     // filtered.push(data);
-      //   }
-      // });
-      
-      // setProducts(s => ({...s, items: filtered, meta: response.data.meta}));
-    }
-  }
+  const [isPromo, setIsPromo] = useState(false);    
 
   const checkboxActive = () => setIsActive(isActive => !isActive);
   const checkboxPromo = () => setIsPromo(isPromo => !isPromo);
 
+  const search = (e, value) => {
+    setSearchValue(value);
+
+    let list = [];
+
+    products.filter((product, index) => {
+      if(product.name.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+        list.push(product);              
+      } else {
+        list.splice(index, 1);
+      }
+    });
+
+    setProducts(list);
+  }
 
 
   useEffect(() => { 
-    let mounted = true;
-    let searchRequest = '';      
+
+    let params = '';      
 
     if(isActive) {
-      searchRequest = 'limit=8&page='+currentPage+'&active='+isActive;
+      params = '?active='+isActive;
     } else if (isPromo) {
-      searchRequest = 'limit=8&page='+currentPage+'&promo='+isPromo;
+      params = '?promo='+isPromo;
     } else if (isActive && isPromo) {
-      searchRequest = 'limit=8&page='+currentPage+'&active='+isActive+'&promo='+isPromo;
+      params = '?active='+isActive+'&promo='+isPromo;
     } else {
-      searchRequest = 'limit=8&page='+currentPage;
+      params = ''
     }
 
     const fetchProducts = async () => {
-      // setLoading(true);
-      console.log(currentPage);
-      const res = await axios('https://join-tsh-api-staging.herokuapp.com/products');
-
-      console.log(res.data.items);
+      const res = await axios('https://join-tsh-api-staging.herokuapp.com/products'+params);
 
       setProducts(res.data.items);
       setPagination(res.data.meta);
-      setLoading(false);
+      setLoading(false);      
     }
 
     fetchProducts();
-          
-    // axios.get('https://join-tsh-api-staging.herokuapp.com/products?'+searchRequest).then(response => {
-    //   if(mounted) {
-    //     setLoading(false);
 
-    //     setProducts(response.data.items);
-    //     setPagination(response.data.meta);
-    //     setCurrentPage(response.data.meta.currentPage);
-    //   }
-    // }).catch(error => {})
-      
-
-    return function cleanup() {
-      mounted = false;
-    }
-  }, [isActive, isPromo, pagination.totalPages]);  
+  }, [isActive, isPromo]);  
 
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // console.log(currentProducts)
 
   const paginate = (e, pageNumber) => {
     e.preventDefault();
@@ -257,11 +229,19 @@ export const Products = () => {
 
     setCurrentPage(pageNumber)
   }  
+
+  // console.log(searchValue);
   
   return (
     <>        
         {/* <h2>Products page</h2> */}        
-        <Header onChangeSearch={handleSearch} search={searchValue} active={checkboxActive} promo={checkboxPromo} />
+        <Header 
+          // onChangeSearch={handleSearch} 
+          search={searchValue} 
+          active={checkboxActive} 
+          promo={checkboxPromo} 
+          onChange={search} 
+        />
 
         <div className="container">
           { 
