@@ -76,25 +76,32 @@
                 border-radius: 8px;
                 font-size: 1.4rem;
                 line-height: 1.4;
+                &::placeholder {
+                    font-size: 1.4rem;
+                    line-height: 1.4;
+                    color: $gray-dark;
+                    opacity: 1;
+                    font-weight: 500;
+                }
                 &:focus {
                     outline-color: $blue-primary;
-                    & + .label {
-                        opacity: 0;
-                        left: 32px;
-                    }
+                    // & + .label {
+                    //     opacity: 0;
+                    //     left: 32px;
+                    // }
                 }
             }
-            .label {
-                position: absolute;
-                top: 50%;
-                left: 16px;
-                transform: translateY(-50%);
-                pointer-events: none;
-                touch-action: none;
-                font-size: 1.4rem;
-                line-height: 1.4;
-                transition: .2s all ease-out;
-            }
+            // .label {
+            //     position: absolute;
+            //     top: 50%;
+            //     left: 16px;
+            //     transform: translateY(-50%);
+            //     pointer-events: none;
+            //     touch-action: none;
+            //     font-size: 1.4rem;
+            //     line-height: 1.4;
+            //     transition: .2s all ease-out;
+            // }
             .icon {
                 position: absolute;
                 top: 50%;
