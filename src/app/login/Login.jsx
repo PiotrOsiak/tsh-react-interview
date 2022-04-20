@@ -20,7 +20,7 @@ export const Login = () => {
     <>
       <Link to={AppRoute.home}>Products page</Link>
       <h2>Login</h2>
-      <form>
+      <form onSubmit={(e) => handleLogin(e) }>
         <div>
           <label>
             username:
@@ -33,7 +33,7 @@ export const Login = () => {
             <input name="password" type="password" onChange={(e) => {setPassword(e.target.value)}} />
           </label>
         </div>
-        <button type="submit" onSubmit={(e) => handleLogin(e) } disabled={!validate()}>submit</button>
+        <button type="submit" disabled={!validate()}>submit</button>
       </form>
     </>
   );
