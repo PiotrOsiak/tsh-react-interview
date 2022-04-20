@@ -39,6 +39,14 @@
                 padding: 0 0 15px;
             }
         }
+        .products__card--unavailable {
+            .products__card-inner .products__card--image {
+                img {
+                    filter: saturate(0);
+                    opacity: .5;
+                }                
+            }
+        }
         &__card-inner {
             background: $white;
             margin: 0 0 0 -16px;

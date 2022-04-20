@@ -5,7 +5,7 @@ import { MdGrade } from 'react-icons/md';
 export const ProductItem = (props) => {
     return (
         <>
-            <div className={`products__card ${props.active ? "available" : ""}`} key={props.id}>
+            <div className={`products__card ${!props.active ? 'products__card--unavailable' : ''}`} key={props.id}>
                 <div className="products__card-inner">
                     <div className="products__card--image">
                     {
