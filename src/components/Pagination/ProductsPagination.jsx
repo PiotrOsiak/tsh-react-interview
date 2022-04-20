@@ -4,43 +4,56 @@ import './ProductsPagination.scss';
 
 export const ProductsPagination = (props) => {
     const { productsPerPage, totalProducts, paginate, paginateCurrent } = props;
-    const pageNumbers = [];
-    const totalPages = Math.ceil(totalProducts / productsPerPage);
+    // const pageNumbers = [];
+    const [pages, setPages] = useState([]);
+    const totalPages = Math.ceil(totalProducts / productsPerPage);    
 
-    // const DOTS = '...';
+    const createPagination = (current, total) => {
+        // If total pages <= 6 return [1,2,3,4,5,6]
+        if(total <= 6) {
+            let n = [];
+            for(let i = 1; i <= total; i++) {
+                n.push(i);
+            }
+            setPages(n);
+            return;
+        }
 
+        // If total pages > 6
+        if(total > 6) {
+            // If current page is 1 or 2 return [ 1, 2, 3, ..., total-2, total-1, total]
+            if(current === 1 || current === 2) {
+                setPages([1,2,3, '...', total-2, total-1, total]);
+            }
+            // If current page is between 2 and total - 4 return [ current-1, current, current+1, ..., total-2, total-1, total]
+            if(current > 2 && current <= total - 3) {
+                setPages([current-1, current, current+1, '...', total-2, total-1, total]);
+            }
 
-    for(let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i)
-        // if(totalPages > 6) {
-            // if(i === paginateCurrent) {                
-                // if(paginateCurrent === 1 || paginateCurrent === 2) {
-                //     pageNumbers.push(i, i+1, i+2, '...', totalPages-2, totalPages-1, totalPages);
-                // }
-
-                // if(paginateCurrent > 3) {
-                //     pageNumbers.push(i-1, i, i+1, '...', totalPages-2, totalPages-1, totalPages);
-                // } 
-                
-                // else if(paginateCurrent >= totalPages-3) {
-                //     pageNumbers.push('...', i, totalPages-2, totalPages-1, totalPages);                    
-                // } 
-                
-                // else {
-                //     pageNumbers.push(i, i+1, i+2, '...', totalPages-2, totalPages-1, totalPages);
-                // }
-            // }
-        // } else {
-        //     pageNumbers.push(i)
-        // }
+            if(current === total - 3) {
+                setPages([1, '...', total-4, current, total-2, total-1, total]);
+            }
+            if(current === total - 2) {
+                setPages([1, '...', total-4, total-3, current, total-1, total]);
+            }
+            if(current === total - 1) {
+                setPages([1, '...', total-4, total-3, total-2, current, total]);
+            }
+            if(current === total) {
+                setPages([1, '...', total-4, total-3, total-2, total-1, current]);
+            }
+        }
     }
-
     
-    // if(pageNumbers.length > 6) {
-    //     if(paginateCurrent > 0 || paginateCurrent < 4) {
-    //         console.log(pageNumbers);        
-    //     }
-    // }
+    useEffect(() => {
+        createPagination(paginateCurrent, totalPages);     
+        
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }, [paginateCurrent, totalPages]);
 
 
 
@@ -57,17 +70,17 @@ export const ProductsPagination = (props) => {
                     <nav>
                         <ul>
                             <li className='page-item page-item--first'>
-                                <a href="!#" onClick={(e) => { paginate(e, pageNumbers[0]) }} className={`button-link ${paginateCurrent === 1 ? 'button-link--active' : ''}`}>First</a>
+                                <a href="!#" onClick={(e) => { paginate(e, 1) }} className={`button-link ${paginateCurrent === 1 ? 'button-link--active' : ''}`}>First</a>
                             </li>
-                            {pageNumbers.map(number => (
-                                <li key={number} className="page-item">
+                            {pages.map(number => (
+                                <li key={number} value={number} className="page-item">
                                     <a onClick={(e) => { paginate(e, number) }} href="!#" className={`page-link ${paginateCurrent === number ? 'page-link--active' : ''}`}>
                                         {number}
                                     </a>
                                 </li>
                             ))}    
                             <li className='page-item page-item--last'>
-                                <a href="!#" onClick={(e) => { paginate(e, pageNumbers.length) }} className={`button-link ${paginateCurrent === pageNumbers.length ? 'button-link--active' : ''}`}>Last</a>
+                                <a href="!#" onClick={(e) => { paginate(e, totalPages) }} className={`button-link ${paginateCurrent === totalPages ? 'button-link--active' : ''}`}>Last</a>
                             </li>
                         </ul>    
                     </nav>                   

@@ -18,7 +18,7 @@ const Spinner = () => {
 export const Products = () => {  
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);  
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(7);
   const [productsPerPage, setProductsPerPage] = useState(8);
   const [searchProduct, setSearchProduct] = useState('');
   const [activeFilter, setActiveFilter] = useState([]);  
@@ -77,8 +77,12 @@ export const Products = () => {
   
   const paginate = (e, pageNumber) => {
     e.preventDefault();
+
+    if(pageNumber === '...' || pageNumber === undefined || pageNumber === 0) {
+      return false;
+    }
     
-    console.log(pageNumber);
+    // console.log(pageNumber);
     setCurrentPage(pageNumber)
   }  
 
