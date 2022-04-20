@@ -100,7 +100,9 @@ export const Header = (props) => {
       <header className='header'>
         <div className="header__wrapper">
           <div className='header__wrapper--title'>
-            <p>join.tsh.io</p>
+            <a href="!#" onClick={(e) => props.logoClick(e)}>
+              <p>join.tsh.io</p>
+            </a>
           </div>
 
           {/* <SearchComponent onChange={props.onChange} search={props.search} activeCheckbox={props.active} promoCheckbox={props.promo} /> */}

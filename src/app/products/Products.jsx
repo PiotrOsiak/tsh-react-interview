@@ -18,10 +18,16 @@ const Spinner = () => {
 export const Products = () => {  
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);  
-  const [currentPage, setCurrentPage] = useState(7);
+  const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage, setProductsPerPage] = useState(8);
   const [searchProduct, setSearchProduct] = useState('');
   const [activeFilter, setActiveFilter] = useState([]);  
+
+  const handlePageReturn = (e) => {
+    e.preventDefault();
+
+    setCurrentPage(1);
+  }
 
   useEffect(() => { 
     
@@ -46,6 +52,8 @@ export const Products = () => {
 
   const filteredProducts = useMemo(() => {
     const hasCategoryFilter = Object.values(activeFilter).includes(true);
+
+    setCurrentPage(1);
 
     const matchesFilter = (product, index) => {
       if(hasCategoryFilter) {        
@@ -88,7 +96,7 @@ export const Products = () => {
 
   return (
     <>                      
-        <Header setSearchProduct={setSearchProduct} setActiveFilter={setActiveFilter} />
+        <Header logoClick={handlePageReturn} setSearchProduct={setSearchProduct} setActiveFilter={setActiveFilter} />
 
         <div className="container">
           { 

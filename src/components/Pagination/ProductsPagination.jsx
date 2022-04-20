@@ -4,7 +4,6 @@ import './ProductsPagination.scss';
 
 export const ProductsPagination = (props) => {
     const { productsPerPage, totalProducts, paginate, paginateCurrent } = props;
-    // const pageNumbers = [];
     const [pages, setPages] = useState([]);
     const totalPages = Math.ceil(totalProducts / productsPerPage);    
 
@@ -53,15 +52,8 @@ export const ProductsPagination = (props) => {
             left: 0,
             behavior: 'smooth'
         });
+        
     }, [paginateCurrent, totalPages]);
-
-
-
-    // If pagesCount n > 6 => 
-        // If User at page 1;2 => 1,2,3 ... n-2, n-1, n
-        // If User at page 3 => 2,3,4 ... n-2, n-1, n        
-    // If Pages Count n <= 6
-        // Return 1,2,3,4,5,6         
 
     return (
         <>
