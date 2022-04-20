@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../routing/AppRoute.enum';
 
 import { MdSearch, MdDone } from 'react-icons/md';
+
+import axios from 'axios';
 
 import './Header.scss';
 
@@ -56,20 +58,51 @@ const SearchComponent = (props) => {
 const User = () => {
   let [showMenu, setShowMenu] = useState(false);
   let [auth, setAuth] = useState(false);
+  let [token, setToken] = useState(null);
+  let [userData, setUserData] = useState({username: '', avatar: ''});
 
   const handleUserClick = () => {
     setShowMenu(!showMenu);
   };
 
-  const handleDropdown = (e) => {
-    e.preventDefault();
-    setAuth(false);
-  }
+  
+  useEffect(() => {
+    let bearerToken = null;
+    
+    if('token' in sessionStorage) {
+      bearerToken = sessionStorage.getItem('token');
+    }
 
-  // const handleLogout = () => {
-  //   setAuth(true);
-  //   setShowMenu(false);
-  // }
+    if(bearerToken) {
+      setToken(bearerToken)
+    }
+    
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+
+    const isAuthenticated = async () => {
+      await axios.get('https://join-tsh-api-staging.herokuapp.com/users/me', config).then(response => {
+          setAuth(true);
+          setUserData({
+            username: response.data.username,
+            avatar: response.data.avatar
+          });
+      }).catch(error => {
+        console.log(error.response);
+      });
+    }
+
+    isAuthenticated();
+
+  }, [auth, token]);
+  
+
+  const handleLogout = () => {
+    setShowMenu(false);
+    setAuth(false);
+    sessionStorage.removeItem('token');
+  }
 
   return (
     <div className="header__wrapper--user">
@@ -77,10 +110,11 @@ const User = () => {
         auth ? (
           <div className="user">
             <div className='user--avatar' onClick={handleUserClick}>
-              <img src="./images/avatar.png" alt='avatar' title='avatar' role='img' />
-            </div>
+              {/* <img src="./images/avatar.png" alt='avatar' title='avatar' role='img' /> */}
+              <img src={userData.avatar} alt={userData.username} title={userData.username} role='img' />
+            </div>            
             <div className={`user--dropdown ${showMenu ? "show" : ""}`}>
-              <a href="/" className='button button-dropdown' onClick={handleDropdown}>Logout</a>
+              <a href="/" className='button button-dropdown' onClick={handleLogout}>Logout</a>
             </div>
           </div>  
         ) : (
