@@ -4,25 +4,42 @@
     position: fixed;
     bottom: 25px;
     right: 25px;
+    @include screenSize(mobileWide) {
+        right: unset;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+    }
     &__error {
         background: $gray-dark;
         width: 100%;
         min-width: 360px;
         max-width: 540px;
         padding: 15px;
+        @include screenSize(mobileWide) {
+            max-width: 100%;
+            min-width: 0;
+        }
         &--message {
             font-size: 1.6rem;
             color: $white;
 
             display: flex;
             align-items: center;
+            @include screenSize(mobileWide) {
+             align-items: flex-start;   
+            }
         }
 
         .icon {
             margin-right: 15px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: center;          
+            @include screenSize(mobileWide) {
+                margin-top: 2px;
+            }  
             svg {
                 display: flex;
                 align-items: center;

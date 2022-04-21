@@ -106,6 +106,7 @@ export const Login = () => {
                     <div className='panel__form--block-input'>
                       <label htmlFor='username'>Username</label>
                       <input
+                        inputMode="text"
                         type='text'
                         id='username'
                         name='username'
@@ -120,6 +121,7 @@ export const Login = () => {
                     <div className='panel__form--block-input'>
                       <label htmlFor='password'>Password</label>
                       <input
+                        inputMode="text"
                         type='password'
                         id='password'
                         name='password'
