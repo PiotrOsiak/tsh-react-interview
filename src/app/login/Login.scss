@@ -1,0 +1,18 @@
+@import '/src/App.scss';
+
+.snackbar {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    &__error {
+        background: $orange;
+        width: 100%;
+        min-width: 360px;
+        max-width: 540px;
+        padding: 15px;
+        &--message {
+            font-size: 1.8rem;
+            color: $gray-dark;
+        }
+    }
+}
