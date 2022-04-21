@@ -21,7 +21,6 @@ const CheckboxComponent = (props) => {
   return (
     <div className="checkbox-item">
       <label>
-        {/* <input id={props.id} type="checkbox" name={props.name} className='checkbox' onChange={(evt) => { props.onChange(evt) }} /> */}
         <input id={props.id} type="checkbox" name={props.name} className='checkbox' onChange={handleChange(props.name)} />
         <span className="name">{ props.text }</span>
         <span className='custom'><MdDone className='checked' /></span>
@@ -36,17 +35,13 @@ const SearchComponent = (props) => {
       <div className="search__container">
         <div className="search__container--input">
           <label>
-            {/* <input type="text" value={props.search} onChange={(evt) => { props.onChange(evt.target, evt.target.value) }} /> */}
             <input type="text" onChange={(event) => props.onChange(event.target.value) } placeholder="Search" />
-            {/* <span className="label">Search</span> */}
             <span className="icon">
               <MdSearch className='search' />
             </span>
           </label>
         </div>
         <div className="search__container--checkboxes">
-          {/* <CheckboxComponent id="label_active" name="active" text="Active" onChange={props.activeCheckbox} />
-          <CheckboxComponent id="label_promo" name="promo" text="Promo" onChange={props.promoCheckbox} /> */}
           <CheckboxComponent id="label_active" name="active" text="Active" setActiveFilter={props.setActiveFilter} />
           <CheckboxComponent id="label_promo" name="promo" text="Promo" setActiveFilter={props.setActiveFilter} />
         </div>
@@ -89,7 +84,7 @@ const User = () => {
             avatar: response.data.avatar
           });
       }).catch(error => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     }
 
@@ -99,9 +94,9 @@ const User = () => {
   
 
   const handleLogout = () => {
-    setShowMenu(false);
-    setAuth(false);
     sessionStorage.removeItem('token');
+    setAuth(false);
+    setShowMenu(false);
   }
 
   return (
@@ -110,7 +105,6 @@ const User = () => {
         auth ? (
           <div className="user">
             <div className='user--avatar' onClick={handleUserClick}>
-              {/* <img src="./images/avatar.png" alt='avatar' title='avatar' role='img' /> */}
               <img src={userData.avatar} alt={userData.username} title={userData.username} role='img' />
             </div>            
             <div className={`user--dropdown ${showMenu ? "show" : ""}`}>
@@ -119,7 +113,6 @@ const User = () => {
           </div>  
         ) : (
           <div className="user-login">
-            {/* <button type='button' className='button button-primary'>Log in</button> */}
             <Link to={AppRoute.login} className="button button-primary">Log in</Link>
           </div>  
         )
@@ -139,9 +132,6 @@ export const Header = (props) => {
             </a>
           </div>
 
-          {/* <SearchComponent onChange={props.onChange} search={props.search} activeCheckbox={props.active} promoCheckbox={props.promo} /> */}
-          {/* <SearchComponent onChange={props.onChange} search={props.search} onCheckbox={props.onCheckbox} /> */}
-          {/* <SearchComponent onChange={props.setSearchProduct} onCheckbox={props.onCheckbox} /> */}
           <SearchComponent onChange={props.setSearchProduct} activeFilter={props.activeFilter} setActiveFilter={props.setActiveFilter} />
           <User />   
           

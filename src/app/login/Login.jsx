@@ -3,6 +3,10 @@ import { Link, useHistory } from "react-router-dom";
 
 import { AppRoute } from "../../routing/AppRoute.enum";
 
+import { MdWarningAmber } from 'react-icons/md';
+
+import { Spinner } from '../products/Products';
+
 import axios from "axios";
 
 import './Login.scss';
@@ -10,6 +14,8 @@ import './Login.scss';
 export const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isPending, setIsPending] = useState(false);
+    const [isError, setIsError] = useState(false);
     const [error, setError] = useState({ statusCode: null, message: "" });
     const history = useHistory();
 
@@ -19,6 +25,8 @@ export const Login = () => {
         e.preventDefault();
 
         const authenticate = async () => {
+          setIsPending(true);
+
             await axios.post("https://join-tsh-api-staging.herokuapp.com/users/login", {
                 username,
                 password
@@ -26,16 +34,28 @@ export const Login = () => {
                 if (error !== "") {
                     setError("");
                 }
+                setIsPending(false);
 
                 sessionStorage.setItem("token", response.data.access_token);
                 history.push(AppRoute.home);
             }).catch((error) => {
                 // console.log(error.response.data);
 
+                setIsPending(false);
+                setIsError(true);
+
                 setError({
                     statusCode: error.response.data.statusCode,
                     message: error.response.data.message
                 });
+
+                setTimeout(() => {
+                  setIsError(false);
+                  setError({
+                    statusCode: null, 
+                    message: ''
+                  });
+                }, 3500);
             });
         };
 
@@ -44,18 +64,26 @@ export const Login = () => {
         }
     };
 
+    const handlePasswordRecovery = (e) => {
+      e.preventDefault();
+    }
+
   return (
-    <>
-      {/* {error.length ? ( */}
+    <>                    
+      {isError ? (
         <div className='snackbar'>
           <div className='snackbar__error'>
-            <p className='snackbar__error--message'>
-              {/* {error.statusCode}: {error.message} */}
-              404: Not Found
+            <p className='snackbar__error--message'>                
+                <span className="icon">
+                  <MdWarningAmber size={21} />
+                </span>
+                <span className="text">
+                  {error.statusCode}: {error.message}
+                </span>
             </p>
           </div>
         </div>
-    {/* ) : null} */}
+    ) : null}
 
     <div className='login'>
         <div className='login__container'>
@@ -81,6 +109,7 @@ export const Login = () => {
                         type='text'
                         id='username'
                         name='username'
+                        placeholder="Enter username"
                         onChange={(e) => {
                           setUsername(e.target.value);
                         }}
@@ -91,9 +120,10 @@ export const Login = () => {
                     <div className='panel__form--block-input'>
                       <label htmlFor='password'>Password</label>
                       <input
-                        type='text'
+                        type='password'
                         id='password'
                         name='password'
+                        placeholder="Enter password"
                         onChange={(e) => {
                           setPassword(e.target.value);
                         }}
@@ -102,12 +132,16 @@ export const Login = () => {
                   </div>
                   <div className='panel__form--block'>
                     <div className='panel__form--block-button'>
-                      <button type='submit' className='button button-primary' disabled={!validate()}>Log in</button>
+                      <button type='submit' className='button-primary' disabled={!validate() || isPending}>
+                        {
+                          !isPending ? 'Log In' : <Spinner />
+                        }
+                      </button>
                     </div>
                   </div>
                   <div className='panel__form--block'>
                     <div className='panel__form--block-action'>
-                      <Link to='/' onClick={(e) => { handlePasswordRecovery(e); }} className='button button-plain'>
+                      <Link to='/' onClick={(e) => { handlePasswordRecovery(e); }} className='button-plain'>
                         Forgot password?
                       </Link>
                     </div>

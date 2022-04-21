@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-// import { Link } from 'react-router-dom';
 
 import './Products.scss';
 
-// import { AppRoute } from '../../routing/AppRoute.enum';
 import { Header } from '../../components/Header/Header';
 import { ProductsNotFound } from '../../components/NotFound/ProductsNotFound';
 import { ProductsPagination } from '../../components/Pagination/ProductsPagination';
@@ -11,7 +9,7 @@ import { ProductContainer } from '../../components/ProductsContainer/ProductsCon
 
 import axios from 'axios';
 
-const Spinner = () => {
+export const Spinner = () => {
   return <div className='spinner'><div className="spinner-inner"></div></div>;
 };
 
@@ -90,7 +88,6 @@ export const Products = () => {
       return false;
     }
     
-    // console.log(pageNumber);
     setCurrentPage(pageNumber)
   }  
 

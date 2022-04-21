@@ -92,23 +92,8 @@
                 }
                 &:focus {
                     outline-color: $blue-primary;
-                    // & + .label {
-                    //     opacity: 0;
-                    //     left: 32px;
-                    // }
                 }
-            }
-            // .label {
-            //     position: absolute;
-            //     top: 50%;
-            //     left: 16px;
-            //     transform: translateY(-50%);
-            //     pointer-events: none;
-            //     touch-action: none;
-            //     font-size: 1.4rem;
-            //     line-height: 1.4;
-            //     transition: .2s all ease-out;
-            // }
+            }            
             .icon {
                 position: absolute;
                 top: 50%;
@@ -203,7 +188,6 @@
             order: 2;
         }
         .user-login {
-            // width: 100px;
             .button-primary {
                 background: $white;
                 border: 1px solid $blue-primary;
